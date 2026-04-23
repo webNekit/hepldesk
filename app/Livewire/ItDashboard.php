@@ -17,6 +17,6 @@ class ItDashboard extends Component
             'newTickets' => $newTickets,
             'inProgressTickets' => $inProgressTickets,
             'resolvedTickets' => $resolvedTickets,
-        ])->layout('layouts.app');
+        ])->layout('layouts.admin');
     }
 }

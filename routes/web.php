@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin only
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/admin/users', UserManagement::class)->name('admin.users');
+        Route::get('/admin/categories', App\Livewire\Admin\CategoryManagement::class)->name('admin.categories');
     });
 
     // Manager and Admin
@@ -52,7 +53,17 @@ Route::post('/login', function () {
     $user = User::where('email', request('email'))->first();
     if ($user) {
         auth()->login($user);
-        return redirect()->intended('/it-dashboard'); // Redirect to panel if role user
+        
+        // Redirect based on user role
+        if (auth()->user()->hasRole('admin')) {
+            return redirect()->intended('/admin/users'); // Admin dashboard
+        } elseif (auth()->user()->hasRole('it_support')) {
+            return redirect()->intended('/it-dashboard'); // IT dashboard
+        } elseif (auth()->user()->hasRole('manager')) {
+            return redirect()->intended('/admin/directory'); // Manager dashboard (directory management)
+        } else {
+            return redirect()->intended('/'); // Regular employee goes to home
+        }
     }
     return back()->withErrors(['email' => 'User not found']);
 });

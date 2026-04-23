@@ -36,6 +36,12 @@
 - [x] Middleware ролей (spatie/laravel-permission)
 - [x] Демо-логин для удобства тестирования
 
+## Данные для входа через роли ✅
+- [x] Администратор: admin@mats.ru / password
+- [x] Техник/Поддержка: tech@mats.ru / password
+- [x] Менеджер: manager@mats.ru / password
+- [x] Сотрудник: ivanov@mats.ru / password
+
 ## Ошибки и исправления ✅
 - [x] Исправлена ошибка прав доступа к логам
 - [x] Исправлены неймспейсы, способ инициализации (new) и tableName в PowerGrid v6

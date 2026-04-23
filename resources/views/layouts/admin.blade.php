@@ -65,7 +65,24 @@
                     </div>
                     <div class="overflow-hidden">
                         <div class="text-sm font-bold truncate">{{ auth()->user()->name }}</div>
-                        <div class="text-[10px] text-emerald-400 uppercase font-bold">{{ auth()->user()->roles->first()->name }}</div>
+                        <div class="text-[10px] text-emerald-400 uppercase font-bold">
+                            @switch(auth()->user()->roles->first()->name)
+                                @case('employee')
+                                    Сотрудник
+                                @break
+                                @case('it_support')
+                                    Техподдержка
+                                @break
+                                @case('manager')
+                                    Менеджер
+                                @break
+                                @case('admin')
+                                    Администратор
+                                @break
+                                @default
+                                    {{ auth()->user()->roles->first()->name }}
+                            @endswitch
+                        </div>
                     </div>
                 </div>
             </div>

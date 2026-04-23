@@ -8,9 +8,9 @@
         </div>
         <div class="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
             <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
-                Комитет сельского хозяйства <br> <span class="text-emerald-400 font-medium text-3xl md:text-5xl">Волгоградской области</span>
+                Комитет сельского хозяйства <br> <span class="text-white font-medium text-3xl md:text-5xl">Волгоградской области</span>
             </h1>
-            <p class="text-xl text-emerald-50 mb-10 max-w-3xl mx-auto font-medium opacity-90">
+            <p class="text-xl text-white mb-10 max-w-3xl mx-auto font-medium opacity-90">
                 Корпоративный портал для сотрудников. Единый справочник и система подачи заявок в службу технической поддержки.
             </p>
             <div class="flex flex-wrap justify-center gap-6">
@@ -35,7 +35,7 @@
             </div>
             <div class="flex flex-wrap gap-4">
                 @foreach($resources as $res)
-                    <a href="{{ $res->url }}" target="_blank" class="px-6 py-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-emerald-500 hover:text-emerald-700 transition-all font-bold text-slate-600 flex items-center gap-2 group">
+                    <a href="{{ $res->url }}" target="_blank" class="px-6 py-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-emerald-50/10 hover:border-emerald-500 transition-all font-bold text-slate-600 flex items-center gap-2 group">
                         {{ $res->name }}
                         <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span>
                     </a>
@@ -47,21 +47,21 @@
     <section class="max-w-7xl mx-auto px-6 py-24">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="bg-white border border-slate-200 rounded-2xl p-10 hover:shadow-2xl hover:-translate-y-2 transition-all group">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-white flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">hub</span>
                 </div>
                 <h3 class="text-2xl font-bold mb-4 text-slate-800">Техподдержка</h3>
                 <p class="text-slate-500 leading-relaxed">Быстрое решение технических проблем и консультации специалистов ИТ-отдела.</p>
             </div>
             <div class="bg-white border border-slate-200 rounded-2xl p-10 hover:shadow-2xl hover:-translate-y-2 transition-all group border-b-4 border-b-emerald-500">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-white flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">style</span>
                 </div>
                 <h3 class="text-2xl font-bold mb-4 text-slate-800">Справочник</h3>
                 <p class="text-slate-500 leading-relaxed">Контакты всех сотрудников и отделов комитета. Удобный поиск по должностям и кабинетам.</p>
             </div>
             <div class="bg-white border border-slate-200 rounded-2xl p-10 hover:shadow-2xl hover:-translate-y-2 transition-all group">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-white flex items-center justify-center mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">menu_book</span>
                 </div>
                 <h3 class="text-2xl font-bold mb-4 text-slate-800">База знаний</h3>

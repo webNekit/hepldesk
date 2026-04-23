@@ -19,10 +19,10 @@
                     </div>
                 </div>
                 <div class="hidden md:flex space-x-2 items-center">
-                    <a href="/" class="px-4 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-900/50 transition-all {{ request()->is('/') ? 'bg-emerald-900 text-white font-bold' : '' }}">Главная</a>
-                    <a href="/directory" class="px-4 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-900/50 transition-all {{ request()->is('directory') ? 'bg-emerald-900 text-white font-bold' : '' }}">Справочник</a>
-                    <a href="/support" class="px-4 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-900/50 transition-all {{ request()->is('support') ? 'bg-emerald-900 text-white font-bold' : '' }}">Поддержка</a>
-                </div>
+                     <a href="/" class="px-4 py-2 rounded-lg text-white hover:bg-emerald-900/50 transition-all {{ request()->is('/') ? 'bg-emerald-900 text-white font-bold' : '' }}">Главная</a>
+                     <a href="/directory" class="px-4 py-2 rounded-lg text-white hover:bg-emerald-900/50 transition-all {{ request()->is('directory') ? 'bg-emerald-900 text-white font-bold' : '' }}">Справочник</a>
+                     <a href="/support" class="px-4 py-2 rounded-lg text-white hover:bg-emerald-900/50 transition-all {{ request()->is('support') ? 'bg-emerald-900 text-white font-bold' : '' }}">Поддержка</a>
+                 </div>
                 <div class="flex items-center space-x-4">
                     @auth
                         <div class="flex items-center gap-4">

@@ -61,9 +61,9 @@
                     </div>
                     <h4 class="font-bold text-emerald-900 mb-4">{{ $instruction->title }}</h4>
                     <ul class="instruction-list">
-                        @foreach(explode("\n", str_replace("\r", "", $instruction->content)) as $line)
-                            @if(trim($line))
-                                <li>{{ ltrim(trim($line), "0123456789. ") }}</li>
+                        @foreach($instruction->steps as $step)
+                            @if(trim($step))
+                                <li>{{ ltrim(trim($step), "0123456789. ") }}</li>
                             @endif
                         @endforeach
                     </ul>
