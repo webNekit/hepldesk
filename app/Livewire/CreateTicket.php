@@ -9,15 +9,29 @@ use Livewire\Component;
 
 class CreateTicket extends Component
 {
-    public $categories, $category_id, $instruction, $title, $description, $priority = 'normal';
+    public $categories;
+    public $category_id;
+    public $instructions = [];
+
+    public $title, $description, $priority = 'normal';
     public $contact_name, $contact_phone, $contact_email;
 
-    public function mount() { $this->categories = Category::all(); }
+    public function mount()
+    {
+        $this->categories = Category::all();
+    }
 
     public function updatedCategoryId($value)
     {
-        // Клиенты видят инструкции БЕЗ pdf_path (текстовые)
-        $this->instruction = $value ? Instruction::where('category_id', $value)->whereNull('pdf_path')->first() : null;
+        if (!$value) {
+            $this->instructions = [];
+            return;
+        }
+
+        // Берём ВСЕ клиентские инструкции (без PDF)
+        $this->instructions = Instruction::where('category_id', $value)
+            ->whereNull('pdf_path')
+            ->get();
     }
 
     public function save()
@@ -32,8 +46,11 @@ class CreateTicket extends Component
         ]);
 
         $category = Category::with('technicians')->find($this->category_id);
-        $assignedTo = $category->technicians()->withCount(['assignedTickets' => fn($q) => $q->whereIn('status', ['new', 'in_progress'])])
-                        ->orderBy('assigned_tickets_count', 'asc')->first()?->id;
+
+        $assignedTo = $category->technicians()
+            ->withCount(['assignedTickets' => fn($q) => $q->whereIn('status', ['new', 'in_progress'])])
+            ->orderBy('assigned_tickets_count', 'asc')
+            ->first()?->id;
 
         Ticket::create([
             'user_id' => auth()->id() ?? 1,
@@ -52,5 +69,9 @@ class CreateTicket extends Component
         return redirect()->to('/');
     }
 
-    public function render() { return view('livewire.create-ticket')->layout('layouts.app'); }
+    public function render()
+    {
+        return view('livewire.create-ticket')
+            ->layout('layouts.app');
+    }
 }
