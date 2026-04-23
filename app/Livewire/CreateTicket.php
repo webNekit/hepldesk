@@ -9,25 +9,15 @@ use Livewire\Component;
 
 class CreateTicket extends Component
 {
-    public $categories;
-    public $category_id;
-    public $instruction;
-    public $title;
-    public $description;
-    public $priority = 'normal';
+    public $categories, $category_id, $instruction, $title, $description, $priority = 'normal';
+    public $contact_name, $contact_phone, $contact_email;
 
-    public function mount()
-    {
-        $this->categories = Category::all();
-    }
+    public function mount() { $this->categories = Category::all(); }
 
     public function updatedCategoryId($value)
     {
-        if ($value) {
-            $this->instruction = Instruction::where('category_id', $value)->first();
-        } else {
-            $this->instruction = null;
-        }
+        // Клиенты видят инструкции БЕЗ pdf_path (текстовые)
+        $this->instruction = $value ? Instruction::where('category_id', $value)->whereNull('pdf_path')->first() : null;
     }
 
     public function save()
@@ -36,28 +26,31 @@ class CreateTicket extends Component
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'priority' => 'required|in:normal,high',
+            'contact_name' => 'required|string',
+            'contact_phone' => 'required|string',
+            'contact_email' => 'required|email',
         ]);
 
-        $category = Category::find($this->category_id);
+        $category = Category::with('technicians')->find($this->category_id);
+        $assignedTo = $category->technicians()->withCount(['assignedTickets' => fn($q) => $q->whereIn('status', ['new', 'in_progress'])])
+                        ->orderBy('assigned_tickets_count', 'asc')->first()?->id;
 
-        $ticket = Ticket::create([
-            'user_id' => auth()->id() ?? 2,
+        Ticket::create([
+            'user_id' => auth()->id() ?? 1,
             'category_id' => $this->category_id,
             'title' => $this->title,
             'description' => $this->description,
             'priority' => $this->priority,
-            'assigned_to' => $category->default_assignee_id,
+            'assigned_to' => $assignedTo,
             'status' => 'new',
+            'contact_name' => $this->contact_name,
+            'contact_phone' => $this->contact_phone,
+            'contact_email' => $this->contact_email,
         ]);
 
-        session()->flash('message', 'Заявка успешно создана! Номер заявки: #' . $ticket->id);
-
+        session()->flash('message', 'Заявка создана!');
         return redirect()->to('/');
     }
 
-    public function render()
-    {
-        return view('livewire.create-ticket')->layout('layouts.app');
-    }
+    public function render() { return view('livewire.create-ticket')->layout('layouts.app'); }
 }

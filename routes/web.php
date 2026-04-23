@@ -33,12 +33,16 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin only
     Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin/users', UserManagement::class)->name('admin.users');
         Route::get('/admin/categories', App\Livewire\Admin\CategoryManagement::class)->name('admin.categories');
+        Route::get('/admin/parts', App\Livewire\Admin\PartManagement::class)->name('admin.parts');
+        Route::get('/admin/brands', App\Livewire\Admin\BrandManagement::class)->name('admin.brands');
+        Route::get('/admin/pdf-instructions', App\Livewire\PdfInstructions::class)->name('admin.pdf-instructions');
     });
 
     // Manager and Admin
     Route::middleware(['role:manager|admin'])->group(function () {
+        Route::get('/admin/users', UserManagement::class)->name('admin.users');
+        Route::get('/admin/employees', App\Livewire\Admin\EmployeeManagement::class)->name('admin.employees');
         Route::get('/admin/directory', DirectoryManagement::class)->name('admin.directory');
         Route::get('/admin/resources', ResourceManagement::class)->name('admin.resources');
     });

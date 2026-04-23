@@ -26,9 +26,19 @@
                 <div class="flex items-center space-x-4">
                     @auth
                         <div class="flex items-center gap-4">
-                            @hasanyrole('admin|it_support|manager')
-                                <a href="/it-dashboard" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-bold border border-white/20 transition-all">Панель управления</a>
-                            @endhasanyrole
+@hasanyrole('admin|it_support|manager')
+    @php
+        $dashboardUrl = '#';
+        if (auth()->user()->hasRole('admin')) {
+            $dashboardUrl = route('admin.users');
+        } elseif (auth()->user()->hasRole('it_support')) {
+            $dashboardUrl = route('it-dashboard');
+        } elseif (auth()->user()->hasRole('manager')) {
+            $dashboardUrl = route('admin.directory');
+        }
+    @endphp
+    <a href="{{ $dashboardUrl }}" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-bold border border-white/20 transition-all">Панель управления</a>
+@endhasanyrole
                             <div class="flex flex-col items-end">
                                 <span class="text-sm text-white font-bold">{{ auth()->user()->name }}</span>
                                 <form method="POST" action="/logout" class="inline">

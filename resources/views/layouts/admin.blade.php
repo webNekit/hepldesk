@@ -8,7 +8,6 @@
 </head>
 <body class="bg-slate-50 font-['Public_Sans'] antialiased">
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
         <aside class="w-64 bg-emerald-950 text-white flex-shrink-0 flex flex-col shadow-xl">
             <div class="h-20 flex items-center px-6 border-b border-emerald-900">
                 <span class="text-xl font-bold tracking-wider">ГКУ ВО "МАЦ"</span>
@@ -16,102 +15,63 @@
             
             <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
                 <a href="/" class="flex items-center gap-3 px-4 py-3 text-emerald-100 hover:bg-emerald-900 rounded-lg transition-colors mb-6">
-                    <span class="material-symbols-outlined">arrow_back</span>
-                    На сайт
+                    <span class="material-symbols-outlined">arrow_back</span> На сайт
                 </a>
 
                 <div class="text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Основное</div>
                 
                 @role('admin|it_support')
                 <a href="/it-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('it-dashboard*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">dashboard</span>
-                    Дашборд заявок
+                    <span class="material-symbols-outlined">dashboard</span> Дашборд заявок
                 </a>
                 @endrole
 
-                @role('admin')
+                @role('admin|manager')
                 <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Администрирование</div>
                 <a href="/admin/users" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/users*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">group</span>
-                    Пользователи
+                    <span class="material-symbols-outlined">group</span> Пользователи
+                </a>
+                <a href="/admin/categories" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/categories*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">category</span> Категории
                 </a>
                 @endrole
 
                 @role('admin|it_support')
-                <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Поддержка</div>
+                <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Справочник</div>
                 <a href="/manage-instructions" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('manage-instructions*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">menu_book</span>
-                    Инструкции
+                    <span class="material-symbols-outlined">menu_book</span> Инструкции (клиенты)
+                </a>
+                <a href="/admin/pdf-instructions" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/pdf-instructions*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">picture_as_pdf</span> PDF (сотрудники)
                 </a>
                 @endrole
 
                 @role('admin|manager')
                 <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Контент</div>
-                <a href="/admin/directory" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/directory*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">contact_phone</span>
-                    Справочник
+                <a href="/admin/employees" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/employees*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">badge</span> Сотрудники
                 </a>
-                <a href="/admin/resources" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/resources*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">link</span>
-                    Гос. ресурсы
+                <a href="/admin/directory" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/directory*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">contact_phone</span> Отделы
+                </a>
+                <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Склад</div>
+                <a href="/admin/brands" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/brands*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">inventory</span> Бренды
+                </a>
+                <a href="/admin/parts" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/parts*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">build</span> Запчасти
                 </a>
                 @endrole
             </nav>
-
-            <div class="p-4 border-t border-emerald-900">
-                <div class="flex items-center gap-3 px-4">
-                    <div class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center font-bold">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </div>
-                    <div class="overflow-hidden">
-                        <div class="text-sm font-bold truncate">{{ auth()->user()->name }}</div>
-                        <div class="text-[10px] text-emerald-400 uppercase font-bold">
-                            @switch(auth()->user()->roles->first()->name)
-                                @case('employee')
-                                    Сотрудник
-                                @break
-                                @case('it_support')
-                                    Техподдержка
-                                @break
-                                @case('manager')
-                                    Менеджер
-                                @break
-                                @case('admin')
-                                    Администратор
-                                @break
-                                @default
-                                    {{ auth()->user()->roles->first()->name }}
-                            @endswitch
-                        </div>
-                    </div>
-                </div>
-            </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-grow flex flex-col h-screen overflow-hidden">
-            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm z-10">
-                <h1 class="text-xl font-bold text-slate-800">
-                    @yield('header_title', 'Панель управления')
-                </h1>
-                
-                <div class="flex items-center gap-4">
-                    <form method="POST" action="/logout">
-                        @csrf
-                        <button type="submit" class="flex items-center gap-2 text-slate-500 hover:text-red-600 transition-colors font-semibold">
-                            <span class="material-symbols-outlined">logout</span>
-                            Выход
-                        </button>
-                    </form>
-                </div>
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm">
+                <h1 class="text-xl font-bold text-slate-800">@yield('header_title', 'Панель управления')</h1>
+                <form method="POST" action="/logout">@csrf <button class="text-slate-500">Выход</button></form>
             </header>
-
             <main class="flex-grow overflow-y-auto p-8">
-                @isset($slot)
-                    {{ $slot }}
-                @else
-                    @yield('content')
-                @endisset
+                {{ $slot ?? '' }} @yield('content')
             </main>
         </div>
     </div>

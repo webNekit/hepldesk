@@ -12,6 +12,11 @@ class Category extends Model
 {
     use HasFactory;
 
+    public function technicians()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function defaultAssignee()
     {
         return $this->belongsTo(User::class, 'default_assignee_id');

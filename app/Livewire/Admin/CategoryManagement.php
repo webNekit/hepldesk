@@ -3,67 +3,61 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Category;
+use App\Models\User;
 use Livewire\Component;
 
 class CategoryManagement extends Component
 {
-    public $categories;
     public $name;
+    public $selectedTechnicians = [];
     public $editingCategoryId;
+    public $showCategoryModal = false;
 
     protected $rules = [
         'name' => 'required|string|max:255',
+        'selectedTechnicians' => 'required|array|min:1',
     ];
 
-    public function mount()
-    {
-        $this->categories = Category::all();
+    public function openCategoryModal() { $this->showCategoryModal = true; }
+    
+    public function closeCategoryModal() { 
+        $this->showCategoryModal = false; 
+        $this->reset(['name', 'selectedTechnicians', 'editingCategoryId']); 
     }
 
     public function render()
     {
         return view('livewire.admin.category-management', [
-            'categories' => Category::withCount(['parts', 'instructions', 'tickets'])->get(),
+            'categories' => Category::with(['instructions', 'parts', 'technicians'])
+                                     ->withCount(['parts', 'instructions', 'tickets'])
+                                     ->get(),
+            'it_supports' => User::role('it_support')->get(),
         ])->layout('layouts.admin');
     }
 
     public function createCategory()
     {
         $this->validate();
-
-        Category::create([
-            'name' => $this->name,
-        ]);
-
-        session()->flash('message', 'Категория создана!');
-        $this->reset(['name']);
-        $this->categories = Category::all();
+        $category = Category::create(['name' => $this->name]);
+        $category->technicians()->sync($this->selectedTechnicians);
+        $this->closeCategoryModal();
     }
 
     public function editCategory($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::with('technicians')->findOrFail($id);
         $this->editingCategoryId = $id;
         $this->name = $category->name;
+        $this->selectedTechnicians = $category->technicians->pluck('id')->toArray();
+        $this->openCategoryModal();
     }
 
     public function updateCategory()
     {
         $this->validate();
-
-        Category::find($this->editingCategoryId)->update([
-            'name' => $this->name,
-        ]);
-
-        session()->flash('message', 'Категория обновлена!');
-        $this->reset(['name', 'editingCategoryId']);
-        $this->categories = Category::all();
-    }
-
-    public function deleteCategory($id)
-    {
-        Category::find($id)->delete();
-        session()->flash('message', 'Категория удалена!');
-        $this->categories = Category::all();
+        $category = Category::find($this->editingCategoryId);
+        $category->update(['name' => $this->name]);
+        $category->technicians()->sync($this->selectedTechnicians);
+        $this->closeCategoryModal();
     }
 }

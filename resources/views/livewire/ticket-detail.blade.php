@@ -1,18 +1,23 @@
 <div class="max-w-5xl mx-auto px-6 py-12">
-    <div class="mb-8">
-        <a href="/it-dashboard" class="text-emerald-900 hover:text-emerald-700 flex items-center gap-2 mb-4 font-bold uppercase text-sm tracking-wider">
-            <span class="material-symbols-outlined">arrow_back</span>
-            Назад в дашборд
-        </a>
-        <div class="flex justify-between items-center">
-            <h2 class="text-3xl font-bold text-emerald-900">Заявка #{{ $ticket->id }}: {{ $ticket->title }}</h2>
-            <div class="flex gap-2">
-                <button wire:click="updateStatus('new')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'new' ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600' }}">Новая</button>
-                <button wire:click="updateStatus('in_progress')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'in_progress' ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-600' }}">В работе</button>
-                <button wire:click="updateStatus('resolved')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'resolved' ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600' }}">Готово</button>
+        <div class="mb-8">
+            <a href="/it-dashboard" class="text-emerald-900 hover:text-emerald-700 flex items-center gap-2 mb-4 font-bold uppercase text-sm tracking-wider">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Назад в дашборд
+            </a>
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-bold text-emerald-900">Заявка #{{ $ticket->id }}: {{ $ticket->title }}</h2>
+                <div class="flex gap-2">
+                    <button wire:click="updateStatus('new')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'new' ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600' }}">Новая</button>
+                    <button wire:click="updateStatus('in_progress')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'in_progress' ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-600' }}">В работе</button>
+                    <button wire:click="updateStatus('resolved')" class="px-4 py-2 rounded-lg text-sm font-bold {{ $ticket->status == 'resolved' ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600' }}">Готово</button>
+                    @if($instruction)
+                        <button wire:click="toggleInstruction" class="px-4 py-2 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+                            Посмотреть инструкцию
+                        </button>
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
@@ -48,7 +53,7 @@
             </div>
 
             <!-- Инструкция для мастера -->
-            @if($instruction)
+            @if($instruction && $showInstruction)
                 <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-8">
                     <div class="flex items-center gap-3 mb-4 text-emerald-800">
                         <span class="material-symbols-outlined font-bold">menu_book</span>
@@ -56,11 +61,17 @@
                     </div>
                     <h4 class="font-bold text-emerald-900 mb-4">{{ $instruction->title }}</h4>
                     <ul class="instruction-list">
-                        @foreach(explode("\n", str_replace("\r", "", $instruction->content)) as $line)
-                            @if(trim($line))
-                                <li>{{ ltrim(trim($line), "0123456789. ") }}</li>
-                            @endif
-                        @endforeach
+                        @if(is_array($instruction->steps))
+                            @foreach($instruction->steps as $step)
+                                <li>{{ $step }}</li>
+                            @endforeach
+                        @elseif(is_string($instruction->steps))
+                            @foreach(explode("\n", str_replace("\r", "", $instruction->steps)) as $line)
+                                @if(trim($line))
+                                    <li>{{ ltrim(trim($line), "0123456789. ") }}</li>
+                                @endif
+                            @endforeach
+                        @endif
                     </ul>
                 </div>
             @endif
@@ -114,6 +125,34 @@
                 @else
                     <div class="text-sm text-slate-500 italic">Специалист не назначен</div>
                 @endif
+            </div>
+
+            <!-- Списание запчастей -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="font-bold text-sm text-slate-400 uppercase tracking-wider mb-4">Списание запчастей</h3>
+                
+                @if (session()->has('error'))
+                    <div class="mb-4 text-xs text-red-600 bg-red-50 p-2 rounded">{{ session('error') }}</div>
+                @endif
+
+                <form wire:submit.prevent="attachPart" class="space-y-4">
+                    <select wire:model="part_id" class="w-full rounded-lg border-slate-300 text-sm focus:border-emerald-500">
+                        <option value="">Выберите запчасть...</option>
+                        @foreach($parts as $part)
+                            <option value="{{ $part->id }}" {{ $part->quantity <= 0 ? 'disabled' : '' }}>
+                                {{ $part->name }} (Остаток: {{ $part->quantity > 0 ? $part->quantity : 'Закончилось' }})
+                            </option>
+                        @endforeach
+                    </select>
+                    
+                    @if($parts->isEmpty())
+                        <p class="text-xs text-slate-400 italic">Для данной категории запчасти не найдены.</p>
+                    @else
+                        <button type="submit" class="w-full bg-emerald-700 text-white font-bold py-2 rounded-lg text-sm hover:bg-emerald-800 transition-all">
+                            Списать запчасть
+                        </button>
+                    @endif
+                </form>
             </div>
 
             <!-- История -->

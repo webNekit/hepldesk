@@ -9,14 +9,17 @@ class ItDashboard extends Component
 {
     public function render()
     {
-        $newTickets = Ticket::where('status', 'new')->latest()->get();
-        $inProgressTickets = Ticket::where('status', 'in_progress')->latest()->get();
-        $resolvedTickets = Ticket::where('status', 'resolved')->latest()->get();
+        $query = Ticket::query();
+
+        // Если не администратор, показываем только свои заявки
+        if (!auth()->user()->hasRole('admin')) {
+            $query->where('assigned_to', auth()->id());
+        }
 
         return view('livewire.it-dashboard', [
-            'newTickets' => $newTickets,
-            'inProgressTickets' => $inProgressTickets,
-            'resolvedTickets' => $resolvedTickets,
+            'newTickets' => $query->clone()->where('status', 'new')->latest()->get(),
+            'inProgressTickets' => $query->clone()->where('status', 'in_progress')->latest()->get(),
+            'resolvedTickets' => $query->clone()->where('status', 'resolved')->latest()->get(),
         ])->layout('layouts.admin');
     }
 }
