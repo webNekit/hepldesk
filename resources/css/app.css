@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@source "../../vendor/power-components/livewire-powergrid/resources/views/**/*.php";
+@source "../../vendor/power-components/livewire-powergrid/src/**/*.php";
+
+@theme {
+    --color-surface-container: #f0eded;
+    --color-on-secondary: #ffffff;
+    --color-surface-variant: #e4e2e1;
+    --color-secondary-container: #fed488;
+    --color-surface: #fcf9f8;
+    --color-primary-container: #1b4332;
+    --color-surface-container-low: #f6f3f2;
+    --color-surface-container-high: #eae7e7;
+    --color-on-surface: #1b1c1c;
+    --color-on-primary: #ffffff;
+    --color-primary: #012d1d;
+    --color-background: #fcf9f8;
+    --color-secondary: #775a19;
+    --font-body-lg: "Public Sans", sans-serif;
+    
+    --color-primary-fixed-variant: #274e3d;
+    --color-outline: #717973;
+    --color-outline-variant: #c1c8c2;
+
+    /* PowerGrid Fixes - Light Theme */
+    --color-pg-primary-50: #f8fafc;
+    --color-pg-primary-100: #f1f5f9;
+    --color-pg-primary-200: #e2e8f0;
+    --color-pg-primary-500: #0f172a;
+    --color-pg-primary-600: #1e293b;
+}
+
+body {
+    font-family: "Public Sans", sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+}
+
+/* PowerGrid Structural Fixes - Strict White Design */
+.pg-table-container { @apply bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm; }
+table { @apply min-w-full bg-white divide-y divide-slate-200 !important; }
+thead { @apply bg-slate-50 !important; }
+th { @apply px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200 !important; }
+tbody { @apply bg-white divide-y divide-slate-100 !important; }
+td { @apply px-6 py-4 text-sm text-slate-900 font-medium !important; }
+tr:hover { @apply bg-slate-50 !important; }
+
+/* Navigation & Elements visibility */
+.nav-link { @apply text-emerald-100 hover:text-white transition-colors px-3 py-2 rounded-lg; }
+.nav-link.active { @apply bg-white/10 text-white font-bold; }
+
+/* Instruction List */
+.instruction-list { @apply space-y-3; }
+.instruction-list li { @apply flex items-start gap-3 p-3 bg-slate-50 rounded-lg text-slate-700 text-sm border border-slate-100; }
+.instruction-list li::before { content: "✓"; @apply text-emerald-600 font-bold; }
