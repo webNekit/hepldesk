@@ -12,7 +12,13 @@
                 <h3 class="text-lg font-medium text-gray-900 mb-4">{{ $editingPartId ? 'Редактировать запчасть' : 'Новая запчасть' }}</h3>
                 <form wire:submit.prevent="{{ $editingPartId ? 'updatePart' : 'createPart' }}" class="space-y-4">
                     <input type="text" wire:model.live="name" placeholder="Название" class="w-full rounded-lg border-slate-300">
-                    <input type="text" wire:model.live="sku" placeholder="Артикул (SKU)" class="w-full rounded-lg border-slate-300">
+                    
+                    <div class="flex gap-2">
+                        <input type="text" wire:model.live="sku" placeholder="Артикул (SKU)" class="flex-1 rounded-lg border-slate-300">
+                        <button type="button" wire:click="generateSku" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-300 transition-colors">
+                            Генерировать
+                        </button>
+                    </div>
                     
                     <select wire:model.live="category_id" class="w-full rounded-lg border-slate-300">
                         <option value="">Выберите категорию</option>

@@ -86,16 +86,26 @@
         @forelse($instructions as $inst)
             <div class="p-5 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
                 <div class="flex justify-between items-start mb-3">
-                    <h4 class="font-bold text-emerald-900">
-                        {{ $inst->title }}
-                    </h4>
-                    <span class="text-xs text-slate-400">
-                        {{ $inst->category->name ?? '' }}
-                    </span>
+                    <div>
+                        <h4 class="font-bold text-emerald-900">
+                            {{ $inst->title }}
+                        </h4>
+                        <span class="text-xs text-slate-400">
+                            {{ $inst->category->name ?? '' }}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button wire:click="edit({{ $inst->id }})" class="text-blue-500 hover:text-blue-700 text-sm font-bold">
+                            Ред.
+                        </button>
+                        <button wire:click="delete({{ $inst->id }})" wire:confirm="Удалить инструкцию?" class="text-red-500 hover:text-red-700 text-sm font-bold">
+                            Удалить
+                        </button>
+                    </div>
                 </div>
 
                 <ul class="space-y-1 text-sm text-slate-700">
-                    @foreach($inst->steps as $step)
+                    @foreach($inst->steps ?? [] as $step)
                         <li class="flex gap-2">
                             <span class="text-emerald-600 font-bold">•</span>
                             <span>{{ $step }}</span>

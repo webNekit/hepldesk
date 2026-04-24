@@ -1,12 +1,29 @@
 <div class="max-w-7xl mx-auto px-6 py-12">
-    <div class="mb-8 flex justify-between items-center">
+    <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
             <h2 class="text-3xl font-bold text-emerald-900 uppercase tracking-wide">Кабинет ИТ-специалиста</h2>
             <p class="text-slate-600">Управление заявками и техническая поддержка сотрудников.</p>
         </div>
-        <div class="flex gap-4">
-            <div class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm shadow-sm">
-                <span class="text-slate-500">Всего заявок:</span>
+        
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+            @role('admin')
+                <select wire:model.live="filterCategory" class="rounded-lg border-slate-200 text-sm focus:border-emerald-500 py-2">
+                    <option value="">Все категории</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+
+                <select wire:model.live="filterAssignee" class="rounded-lg border-slate-200 text-sm focus:border-emerald-500 py-2">
+                    <option value="">Все сотрудники</option>
+                    @foreach($technicians as $tech)
+                        <option value="{{ $tech->id }}">{{ $tech->name }}</option>
+                    @endforeach
+                </select>
+            @endrole
+
+            <div class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm shadow-sm flex items-center">
+                <span class="text-slate-500 mr-2">Всего заявок:</span>
                 <span class="font-bold text-emerald-900">{{ \App\Models\Ticket::count() }}</span>
             </div>
         </div>
@@ -34,9 +51,9 @@
                         <div class="flex items-center justify-between pt-3 border-t border-slate-50">
                             <div class="flex items-center gap-2">
                                 <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-700">
-                                    {{ substr($ticket->user->name, 0, 1) }}
+                                    {{ mb_substr($ticket->contact_name ?? $ticket->user->name, 0, 1) }}
                                 </div>
-                                <span class="text-[10px] text-slate-600">{{ $ticket->user->name }}</span>
+                                <span class="text-[10px] text-slate-600">{{ $ticket->contact_name ?? $ticket->user->name }}</span>
                             </div>
                             <span class="text-[10px] text-slate-400">{{ $ticket->created_at->diffForHumans() }}</span>
                         </div>
@@ -65,9 +82,9 @@
                         <div class="flex items-center justify-between pt-3 border-t border-slate-50">
                             <div class="flex items-center gap-2">
                                 <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-[10px] font-bold text-amber-700">
-                                    {{ substr($ticket->user->name, 0, 1) }}
+                                    {{ mb_substr($ticket->contact_name ?? $ticket->user->name, 0, 1) }}
                                 </div>
-                                <span class="text-[10px] text-slate-600">{{ $ticket->user->name }}</span>
+                                <span class="text-[10px] text-slate-600">{{ $ticket->contact_name ?? $ticket->user->name }}</span>
                             </div>
                             <span class="text-[10px] text-slate-400">{{ $ticket->created_at->diffForHumans() }}</span>
                         </div>
@@ -93,9 +110,9 @@
                         <div class="flex items-center justify-between pt-3 border-t border-slate-50">
                             <div class="flex items-center gap-2">
                                 <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-700">
-                                    {{ substr($ticket->user->name, 0, 1) }}
+                                    {{ mb_substr($ticket->contact_name ?? $ticket->user->name, 0, 1) }}
                                 </div>
-                                <span class="text-[10px] text-slate-600">{{ $ticket->user->name }}</span>
+                                <span class="text-[10px] text-slate-600">{{ $ticket->contact_name ?? $ticket->user->name }}</span>
                             </div>
                             <span class="text-[10px] text-slate-400">{{ $ticket->updated_at->diffForHumans() }}</span>
                         </div>

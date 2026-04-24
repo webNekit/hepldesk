@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Part;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Part;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,7 +12,20 @@ class PartManagement extends Component
 {
     use WithPagination;
 
-    public $name, $sku, $category_id, $brand_id, $quantity, $description, $editingPartId;
+    public $name;
+
+    public $sku;
+
+    public $category_id;
+
+    public $brand_id;
+
+    public $quantity;
+
+    public $description;
+
+    public $editingPartId;
+
     public $showPartModal = false;
 
     protected $rules = [
@@ -22,9 +35,19 @@ class PartManagement extends Component
         'quantity' => 'required|integer|min:0',
     ];
 
-    public function openPartModal() { $this->showPartModal = true; }
-    public function closePartModal() { 
-        $this->showPartModal = false; 
+    public function openPartModal()
+    {
+        $this->showPartModal = true;
+    }
+
+    public function generateSku()
+    {
+        $this->sku = 'SKU-'.strtoupper(bin2hex(random_bytes(4)));
+    }
+
+    public function closePartModal()
+    {
+        $this->showPartModal = false;
         $this->reset(['name', 'sku', 'category_id', 'brand_id', 'quantity', 'description', 'editingPartId']);
     }
 

@@ -19,6 +19,7 @@
                     </select>
                     <input type="text" wire:model.live="position" placeholder="Должность" class="w-full rounded-lg border-slate-300">
                     <input type="text" wire:model.live="phone" placeholder="Телефон" class="w-full rounded-lg border-slate-300">
+                    <input type="text" wire:model.live="cabinet" placeholder="Кабинет" class="w-full rounded-lg border-slate-300">
                     <div class="flex justify-end gap-2 pt-4">
                         <button type="button" wire:click="closeModal" class="bg-slate-100 text-slate-500 font-bold py-2 px-4 rounded-lg">Отмена</button>
                         <button type="submit" class="bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg">Сохранить</button>

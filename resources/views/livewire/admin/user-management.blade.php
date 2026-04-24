@@ -14,6 +14,13 @@
                     <input type="text" wire:model.live="name" placeholder="ФИО" class="w-full rounded-lg border-slate-300">
                     <input type="email" wire:model.live="email" placeholder="Email" class="w-full rounded-lg border-slate-300">
                     @if(!$editingUserId) <input type="password" wire:model.live="password" placeholder="Пароль" class="w-full rounded-lg border-slate-300"> @endif
+                    <select wire:model.live="department_id" class="w-full rounded-lg border-slate-300">
+                        <option value="">Выберите отдел</option>
+                        @foreach($departments as $dept) <option value="{{ $dept->id }}">{{ $dept->name }}</option> @endforeach
+                    </select>
+                    <input type="text" wire:model.live="position" placeholder="Должность" class="w-full rounded-lg border-slate-300">
+                    <input type="text" wire:model.live="phone" placeholder="Телефон" class="w-full rounded-lg border-slate-300">
+                    <input type="text" wire:model.live="cabinet" placeholder="Кабинет" class="w-full rounded-lg border-slate-300">
                     
                     <div class="space-y-1">
                         <label class="block text-xs font-bold text-slate-500 uppercase">Роли</label>

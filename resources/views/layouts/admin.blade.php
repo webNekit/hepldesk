@@ -42,7 +42,7 @@
                     <span class="material-symbols-outlined">menu_book</span> Инструкции (клиенты)
                 </a>
                 <a href="/admin/pdf-instructions" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/pdf-instructions*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
-                    <span class="material-symbols-outlined">picture_as_pdf</span> PDF (сотрудники)
+                    <span class="material-symbols-outlined">picture_as_pdf</span> Инструкции (сотрудники)
                 </a>
                 @endrole
 

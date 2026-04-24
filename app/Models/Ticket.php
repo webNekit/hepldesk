@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['user_id', 'category_id', 'assigned_to', 'title', 'description', 'status', 'priority'])]
+#[Fillable(['user_id', 'category_id', 'assigned_to', 'title', 'description', 'status', 'priority', 'contact_name', 'contact_phone', 'contact_email'])]
 class Ticket extends Model
 {
     use HasFactory;

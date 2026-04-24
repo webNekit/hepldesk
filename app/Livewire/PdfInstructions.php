@@ -2,22 +2,28 @@
 
 namespace App\Livewire;
 
+use App\Models\Category;
+use App\Models\Instruction;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Instruction;
-use App\Models\Category;
 
 class PdfInstructions extends Component
 {
     use WithFileUploads;
 
     public $title;
+
     public $category_id;
+
     public $pdf;
 
     public $showModal = false;
 
+    public $editingId;
+
     public $categories = [];
+
     public $instructions = [];
 
     public function mount()
@@ -33,32 +39,66 @@ class PdfInstructions extends Component
 
     public function openModal()
     {
-        $this->reset(['title', 'category_id', 'pdf']);
+        $this->reset(['title', 'category_id', 'pdf', 'editingId']);
         $this->showModal = true;
     }
 
     public function closeModal()
     {
+        $this->reset(['title', 'category_id', 'pdf', 'editingId']);
         $this->showModal = false;
+    }
+
+    public function edit($id)
+    {
+        $instruction = Instruction::findOrFail($id);
+        $this->editingId = $instruction->id;
+        $this->title = $instruction->title;
+        $this->category_id = $instruction->category_id;
+        $this->showModal = true;
+    }
+
+    public function delete($id)
+    {
+        $instruction = Instruction::findOrFail($id);
+        if ($instruction->pdf_path) {
+            Storage::disk('public')->delete($instruction->pdf_path);
+        }
+        $instruction->delete();
+        $this->loadInstructions();
     }
 
     public function save()
     {
-        $this->validate([
+        $rules = [
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'pdf' => 'required|file|mimes:pdf|max:10240',
-        ]);
+        ];
 
-        // 🔥 Сохраняем файл
-        $path = $this->pdf->store('instructions', 'public');
+        if (! $this->editingId || $this->pdf) {
+            $rules['pdf'] = 'required|file|mimes:pdf|max:10240';
+        }
 
-        Instruction::create([
+        $this->validate($rules);
+
+        $data = [
             'title' => $this->title,
             'category_id' => $this->category_id,
-            'pdf_path' => $path,
-            'steps' => null, // важно чтобы не ломалось
-        ]);
+        ];
+
+        if ($this->pdf) {
+            // Удаляем старый файл при замене
+            if ($this->editingId) {
+                $oldInst = Instruction::find($this->editingId);
+                if ($oldInst && $oldInst->pdf_path) {
+                    Storage::disk('public')->delete($oldInst->pdf_path);
+                }
+            }
+            $data['pdf_path'] = $this->pdf->store('instructions', 'public');
+            $data['steps'] = null;
+        }
+
+        Instruction::updateOrCreate(['id' => $this->editingId], $data);
 
         $this->closeModal();
         $this->loadInstructions();

@@ -37,7 +37,7 @@
                         </h4>
 
                         <ul class="space-y-1 text-sm text-slate-700">
-                            @foreach($instruction->steps as $step)
+                            @foreach($instruction->steps ?? [] as $step)
                                 @if(trim($step))
                                     <li class="flex gap-2">
                                         <span class="text-emerald-600 font-bold">•</span>

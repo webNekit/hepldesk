@@ -43,6 +43,8 @@ class UserManagement extends Component
         $this->email = $user->email;
         $this->department_id = $user->department_id;
         $this->position = $user->position;
+        $this->phone = $user->phone;
+        $this->cabinet = $user->cabinet;
         $this->selected_roles = $user->roles->pluck('name')->toArray();
         $this->openModal();
     }
@@ -52,6 +54,10 @@ class UserManagement extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . ($this->editingUserId ?? 'NULL'),
             'selected_roles' => 'required|array|min:1',
+            'department_id' => 'nullable|exists:departments,id',
+            'position' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'cabinet' => 'nullable|string|max:255',
         ];
         if (!$this->editingUserId) $rules['password'] = 'required|min:6';
         

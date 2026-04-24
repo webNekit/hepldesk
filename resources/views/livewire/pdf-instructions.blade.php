@@ -16,7 +16,7 @@
             <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
 
                 <h3 class="text-xl font-bold text-slate-800 mb-6">
-                    Загрузка PDF инструкции
+                    {{ $editingId ? 'Редактирование PDF инструкции' : 'Загрузка PDF инструкции' }}
                 </h3>
 
                 <form wire:submit.prevent="save" class="space-y-6">
@@ -98,11 +98,17 @@
                             {{ $inst->category->name ?? '-' }}
                         </td>
 
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-6 py-4 text-right flex justify-end gap-3 items-center">
                             <a href="{{ asset('storage/' . $inst->pdf_path) }}" target="_blank"
-                                class="text-blue-600 font-bold text-xs uppercase">
-                                Открыть PDF
+                                class="text-emerald-600 hover:text-emerald-800 font-bold text-sm uppercase">
+                                Открыть
                             </a>
+                            <button wire:click="edit({{ $inst->id }})" class="text-blue-500 hover:text-blue-700 text-sm font-bold">
+                                Ред.
+                            </button>
+                            <button wire:click="delete({{ $inst->id }})" wire:confirm="Удалить инструкцию?" class="text-red-500 hover:text-red-700 text-sm font-bold">
+                                Удалить
+                            </button>
                         </td>
                     </tr>
                 @empty

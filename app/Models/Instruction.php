@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['category_id', 'title', 'steps'])]
+#[Fillable(['category_id', 'title', 'steps', 'pdf_path'])]
 class Instruction extends Model
 {
     use HasFactory;

@@ -54,6 +54,7 @@ final class DirectoryTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
+            ->add('email')
             ->add('department_name', fn (User $model) => optional($model->department)->name)
             ->add('position')
             ->add('phone')
@@ -64,6 +65,10 @@ final class DirectoryTable extends PowerGridComponent
     {
         return [
             Column::make('ФИО', 'name')
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Email', 'email')
                 ->sortable()
                 ->searchable(),
 
