@@ -19,6 +19,13 @@
                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                 @endforeach
             </select>
+
+            <select wire:model="asset_id" class="w-full rounded-xl border-slate-300 focus:border-emerald-500">
+                <option value="">Связать с оборудованием (необязательно)</option>
+                @foreach($assets as $asset)
+                    <option value="{{ $asset->id }}">{{ $asset->name }} ({{ $asset->serial_number }})</option>
+                @endforeach
+            </select>
         </div>
 
         <input type="text" wire:model="title" placeholder="Тема заявки"

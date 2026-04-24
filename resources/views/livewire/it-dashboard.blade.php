@@ -42,9 +42,16 @@
                     <a href="/tickets/{{ $ticket->id }}" class="block bg-white p-4 rounded-lg shadow-sm border border-slate-200 hover:border-emerald-500 transition-all group">
                         <div class="flex justify-between items-start mb-2">
                             <span class="text-xs font-bold text-slate-400">#{{ $ticket->id }}</span>
-                            @if($ticket->priority == 'high')
-                                <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Срочно</span>
-                            @endif
+                            <div class="flex flex-col gap-1 items-end">
+                                @if($ticket->priority == 'high')
+                                    <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Срочно</span>
+                                @endif
+                                @if($ticket->due_date && $ticket->due_date < now())
+                                    <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase animate-pulse">Просрочено</span>
+                                @elseif($ticket->due_date && $ticket->due_date < now()->addHours(2))
+                                    <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">Осталось мало времени</span>
+                                @endif
+                            </div>
                         </div>
                         <h4 class="font-bold text-slate-800 mb-1 group-hover:text-emerald-700">{{ $ticket->title }}</h4>
                         <p class="text-xs text-slate-500 mb-3 line-clamp-2">{{ $ticket->description }}</p>
@@ -74,9 +81,16 @@
                     <a href="/tickets/{{ $ticket->id }}" class="block bg-white p-4 rounded-lg shadow-sm border border-slate-200 hover:border-emerald-500 transition-all group">
                         <div class="flex justify-between items-start mb-2">
                             <span class="text-xs font-bold text-slate-400">#{{ $ticket->id }}</span>
-                            @if($ticket->priority == 'high')
-                                <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Срочно</span>
-                            @endif
+                            <div class="flex flex-col gap-1 items-end">
+                                @if($ticket->priority == 'high')
+                                    <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Срочно</span>
+                                @endif
+                                @if($ticket->due_date && $ticket->due_date < now())
+                                    <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase animate-pulse">Просрочено</span>
+                                @elseif($ticket->due_date && $ticket->due_date < now()->addHours(2))
+                                    <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">Осталось мало времени</span>
+                                @endif
+                            </div>
                         </div>
                         <h4 class="font-bold text-slate-800 mb-1 group-hover:text-emerald-700">{{ $ticket->title }}</h4>
                         <div class="flex items-center justify-between pt-3 border-t border-slate-50">

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Instruction;
 use App\Models\Ticket;
@@ -10,11 +11,24 @@ use Livewire\Component;
 class CreateTicket extends Component
 {
     public $categories;
+
     public $category_id;
+
     public $instructions = [];
 
-    public $title, $description, $priority = 'normal';
-    public $contact_name, $contact_phone, $contact_email;
+    public $title;
+
+    public $description;
+
+    public $priority = 'normal';
+
+    public $contact_name;
+
+    public $contact_phone;
+
+    public $contact_email;
+
+    public $asset_id;
 
     public function mount()
     {
@@ -23,8 +37,9 @@ class CreateTicket extends Component
 
     public function updatedCategoryId($value)
     {
-        if (!$value) {
+        if (! $value) {
             $this->instructions = [];
+
             return;
         }
 
@@ -48,11 +63,17 @@ class CreateTicket extends Component
         $category = Category::with('technicians')->find($this->category_id);
 
         $assignedTo = $category->technicians()
-            ->withCount(['assignedTickets' => fn($q) => $q->whereIn('status', ['new', 'in_progress'])])
+            ->withCount(['assignedTickets' => fn ($q) => $q->whereIn('status', ['new', 'in_progress'])])
             ->orderBy('assigned_tickets_count', 'asc')
             ->first()?->id;
 
-        Ticket::create([
+        $dueDate = match ($this->priority) {
+            'high' => now()->addHours(2),
+            'low' => now()->addHours(48),
+            default => now()->addHours(24),
+        };
+
+        $ticket = Ticket::create([
             'user_id' => auth()->id() ?? 1,
             'category_id' => $this->category_id,
             'title' => $this->title,
@@ -63,15 +84,19 @@ class CreateTicket extends Component
             'contact_name' => $this->contact_name,
             'contact_phone' => $this->contact_phone,
             'contact_email' => $this->contact_email,
+            'due_date' => $dueDate,
+            'asset_id' => $this->asset_id,
         ]);
 
-        session()->flash('message', 'Заявка создана!');
+        session()->flash('message', 'Заявка создана! Ссылка для отслеживания: '.route('track', $ticket->uuid));
+
         return redirect()->to('/');
     }
 
     public function render()
     {
-        return view('livewire.create-ticket')
-            ->layout('layouts.app');
+        return view('livewire.create-ticket', [
+            'assets' => Asset::where('user_id', auth()->id())->orWhereNull('user_id')->get(),
+        ])->layout('layouts.app');
     }
 }

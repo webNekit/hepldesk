@@ -24,6 +24,12 @@
                 <a href="/it-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('it-dashboard*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
                     <span class="material-symbols-outlined">dashboard</span> Дашборд заявок
                 </a>
+                <a href="/admin/assets" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/assets*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">inventory_2</span> Оборудование
+                </a>
+                <a href="/admin/analytics" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/analytics*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">analytics</span> Аналитика
+                </a>
                 @endrole
 
                 @role('admin|manager')
@@ -68,7 +74,12 @@
         <div class="flex-grow flex flex-col h-screen overflow-hidden">
             <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm">
                 <h1 class="text-xl font-bold text-slate-800">@yield('header_title', 'Панель управления')</h1>
-                <form method="POST" action="/logout">@csrf <button class="text-slate-500">Выход</button></form>
+                <div class="flex items-center gap-6">
+                    <div class="bg-emerald-950 rounded-xl p-1 shadow-inner">
+                        <livewire:notification-bell />
+                    </div>
+                    <form method="POST" action="/logout">@csrf <button class="text-slate-500 font-bold text-xs uppercase hover:text-red-500 transition-colors">Выход</button></form>
+                </div>
             </header>
             <main class="flex-grow overflow-y-auto p-8">
                 {{ $slot ?? '' }} @yield('content')

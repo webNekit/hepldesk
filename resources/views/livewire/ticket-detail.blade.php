@@ -97,10 +97,79 @@
                     </button>
                 </form>
             </div>
+
+            {{-- ОТЗЫВ ЗАКАЗЧИКА --}}
+            @if($ticket->status === 'resolved')
+                <div class="bg-white rounded-xl shadow-lg border-2 border-emerald-100 overflow-hidden mt-12">
+                    <div class="bg-emerald-50 px-6 py-3 border-b border-emerald-100 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-600 text-sm">reviews</span>
+                        <h3 class="font-bold text-emerald-900 text-sm uppercase tracking-wider">Отзыв заказчика</h3>
+                    </div>
+                    <div class="p-8">
+                        @if($ticket->rating)
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="flex text-amber-400">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <span class="material-symbols-outlined {{ $i <= $ticket->rating ? 'fill-1' : '' }}" style="font-variation-settings: 'FILL' {{ $i <= $ticket->rating ? '1' : '0' }}">star</span>
+                                    @endfor
+                                </div>
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-black">{{ $ticket->rating }} / 5</span>
+                            </div>
+                            
+                            @if($ticket->feedback_comment)
+                                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 italic text-slate-700 relative">
+                                    <span class="absolute -top-3 -left-2 text-6xl text-slate-200 font-serif leading-none">“</span>
+                                    {{ $ticket->feedback_comment }}
+                                    <span class="absolute -bottom-8 -right-2 text-6xl text-slate-200 font-serif leading-none rotate-180">“</span>
+                                </div>
+                            @endif
+                        @else
+                            <div class="flex flex-col items-center justify-center py-4 text-slate-400">
+                                <span class="material-symbols-outlined text-4xl mb-2 opacity-20">sentiment_neutral</span>
+                                <p class="text-sm italic">Заказчик еще не оставил отзыв</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
 
         {{-- ПРАВАЯ ЧАСТЬ --}}
         <div class="space-y-6">
+
+            {{-- ЗАКАЗЧИК --}}
+            <div class="bg-white rounded-xl shadow-sm border p-6 border-l-4 border-l-emerald-500">
+                <h3 class="text-sm text-slate-400 uppercase mb-4">Информация о заказчике</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-slate-400 text-lg">person</span>
+                        <div>
+                            <div class="text-xs text-slate-400">ФИО</div>
+                            <div class="font-bold text-slate-800">{{ $ticket->contact_name ?? $ticket->user->name }}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-slate-400 text-lg">call</span>
+                        <div>
+                            <div class="text-xs text-slate-400">Телефон</div>
+                            <div class="font-medium text-slate-700">{{ $ticket->contact_phone ?? '—' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-slate-400 text-lg">mail</span>
+                        <div>
+                            <div class="text-xs text-slate-400">Email</div>
+                            <a href="mailto:{{ $ticket->contact_email }}?subject=Заявка #{{ $ticket->id }}&body=Здравствуйте! Отследить статус вашей заявки можно по ссылке: {{ $ticket->uuid ? route('track', $ticket->uuid) : 'пока не сгенерирована' }}" 
+                               class="font-bold text-emerald-700 hover:text-emerald-900 hover:underline transition-colors break-all">
+                                {{ $ticket->contact_email ?? '—' }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {{-- ИСПОЛНИТЕЛЬ --}}
             <div class="bg-white rounded-xl shadow-sm border p-6">
@@ -111,6 +180,34 @@
                 @else
                     <div class="text-sm text-slate-400">Не назначен</div>
                 @endif
+            </div>
+
+            {{-- ОБОРУДОВАНИЕ --}}
+            <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-sm text-slate-400 uppercase mb-2">Привязанное оборудование</h3>
+
+                <div class="space-y-4">
+                    <select wire:model="asset_id" wire:change="updateAsset" class="w-full rounded-lg border-slate-300 text-sm">
+                        <option value="">Выберите устройство</option>
+                        @foreach($assets as $asset)
+                            <option value="{{ $asset->id }}">
+                                {{ $asset->name }} ({{ $asset->serial_number }})
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @if($ticket->asset)
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <div class="text-xs font-bold text-slate-800">{{ $ticket->asset->name }}</div>
+                            <div class="text-[10px] text-slate-400">S/N: {{ $ticket->asset->serial_number }}</div>
+                            <div class="mt-2">
+                                <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-100 text-emerald-700">
+                                    {{ $ticket->asset->status }}
+                                </span>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             {{-- ЗАПЧАСТИ --}}
@@ -131,6 +228,28 @@
                         Списать
                     </button>
                 </form>
+            </div>
+
+            {{-- ССЫЛКА ДЛЯ КЛИЕНТА --}}
+            <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-sm text-slate-400 uppercase mb-2">Публичная ссылка</h3>
+                <p class="text-xs text-slate-500 mb-4">Отправьте эту ссылку клиенту, чтобы он мог следить за историей заявки и оставить оценку.</p>
+                
+                @if($ticket->uuid)
+                    <div class="flex gap-2">
+                        <input type="text" readonly value="{{ route('track', $ticket->uuid) }}" class="w-full rounded-lg border-slate-300 bg-slate-50 text-xs text-slate-500 cursor-text" id="trackingLink">
+                        <button onclick="navigator.clipboard.writeText(document.getElementById('trackingLink').value); alert('Ссылка скопирована!')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition-colors" title="Скопировать">
+                            Скопировать
+                        </button>
+                    </div>
+                @else
+                    <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                        <p class="text-xs text-amber-700 mb-2">У этой заявки нет публичного ключа (старая заявка).</p>
+                        <button wire:click="generateUuid" class="bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-amber-700 transition-colors">
+                            Сгенерировать ключ
+                        </button>
+                    </div>
+                @endif
             </div>
 
         </div>
