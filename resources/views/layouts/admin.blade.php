@@ -60,6 +60,9 @@
                 <a href="/admin/directory" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/directory*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
                     <span class="material-symbols-outlined">contact_phone</span> Отделы
                 </a>
+                <a href="/admin/resources" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/resources*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
+                    <span class="material-symbols-outlined">public</span> Гос. ресурсы
+                </a>
                 <div class="mt-8 text-xs font-bold text-emerald-500 uppercase px-4 mb-2 tracking-widest">Склад</div>
                 <a href="/admin/brands" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {{ request()->is('admin/brands*') ? 'bg-emerald-800 text-white' : 'text-emerald-100 hover:bg-emerald-900' }}">
                     <span class="material-symbols-outlined">inventory</span> Бренды
