@@ -14,12 +14,17 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
 /vendor
+
+# --- Beget deploy ---
+# public/build (собранные ассеты) коммитим — на shared-хостинге обычно нет npm.
+# vendor НЕ коммитим: на сервере выполняем  php8.x composer.phar install --no-dev
+# symlink public/storage и public_html создаёт  php artisan storage:link
+# database/database.sqlite коммитим — едет с демо-данными (см. database/.gitignore)
 _ide_helper.php
 Homestead.json
 Homestead.yaml

@@ -75,6 +75,11 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+
+        // Beget: корень сайта — папка public_html внутри корня проекта.
+        // storage:link создаст симлинк public_html -> public,
+        // чтобы Beget отдавал Laravel без смены document root в панели.
+        base_path('public_html') => base_path('public'),
     ],
 
 ];
